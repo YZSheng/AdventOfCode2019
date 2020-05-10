@@ -10,8 +10,12 @@
   [mass]
   (- (int (Math/floor (/ mass 3))) 2))
 
+(defn find-sum-of-fuels [mass-list]
+  (->> mass-list
+       (map read-string)
+       (map get-fuel)
+       (reduce +)))
+
 (->> "resources/day_one_part_one.txt"
      read-file
-     (map read-string)
-     (map get-fuel)
-     (reduce +))
+     find-sum-of-fuels)

@@ -74,11 +74,36 @@
   (with-open [rdr (io/reader path)]
     (doall (line-seq rdr))))
 
-(-> "resources/day_two_part_one.txt"
-    read-file
-    first
-    format-command
-    (assoc 1 12)
-    (assoc 2 2)
-    process-command
-    first)
+(defn get-output
+  [noun verb]
+  (-> "resources/day_two_part_one.txt"
+      read-file
+      first
+      format-command
+      (assoc 1 noun)
+      (assoc 2 verb)
+      process-command
+      first))
+
+(get-output 12 2)
+
+(defn get-search-space [size]
+  (for [i (range 0 size)
+        j (range 0 size)]
+    [i j]))
+
+(get-search-space 3)
+
+(->> (get-search-space 99)
+     (filter #(= 19690720 (get-output (first %) (last %)))))
+
+
+
+
+
+
+
+
+
+
+

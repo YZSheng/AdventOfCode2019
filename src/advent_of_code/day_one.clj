@@ -10,7 +10,7 @@
   [mass]
   (- (int (Math/floor (/ mass 3))) 2))
 
-(->> "resources/dayone_part_one.txt"
+(->> "resources/day_one_part_one.txt"
      read-file
      (map read-string)
      (map get-fuel)

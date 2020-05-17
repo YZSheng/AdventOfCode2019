@@ -46,12 +46,13 @@
 (defn process-step
   [step [x y]]
   (let [direction (subs step 0 1)
-        count (subs step 1)]
-    (case direction
-      "U" (move-up [x y] (read-string count))
-      "D" (move-down [x y] (read-string count))
-      "L" (move-left [x y] (read-string count))
-      "R" (move-right [x y] (read-string count)))))
+        count (subs step 1)
+        fn (case direction
+             "U" move-up
+             "D" move-down
+             "L" move-left
+             "R" move-right)]
+    (fn [x y] (read-string count))))
 
 (process-step "R3" [0 0])
 
@@ -82,7 +83,7 @@
 (process-steps-str "R8,U5,L5,D3")
 
 (defn calculate-distance [[x y]]
-  (+ (Math/abs x) (Math/abs y)))
+  (+ (Math/abs ^int x) (Math/abs ^int y)))
 
 (calculate-distance [4 5])
 

@@ -72,6 +72,49 @@
                    "D)I"
                    "E)J"
                    "J)K"
-                   "K)L"])
+                   "K)L"
+                   "K)YOU"
+                   "I)SAN"])
 
 (total-count (read-file "resources/day_six_part_one.txt"))
+
+(defn related-objects
+  [node]
+  (conj (:outer node) (:inner node)))
+
+(related-objects {:inner "A", :object "B", :outer #{"E" "C"}})
+
+
+(defn find-related-object
+  [input object]
+  (->> (filter #(= object (:object %)) (form-chain input))
+       first
+       related-objects))
+
+(find-related-object ["A)B" "B)C" "B)E" "C)D"] "B")
+
+
+(defn find-related-objects-of-set
+  [input objects exclude-list]
+  (->> (map #(find-related-object input %) objects)
+       (apply clojure.set/union)
+       (remove #(some #{%} exclude-list))))
+
+(find-related-objects-of-set ["A)B" "B)C" "B)E" "C)D"] #{"B" "C"} #{"B" "C"})
+
+
+(defn find-distance
+  [input a b]
+  (loop [count -1
+         current #{a}
+         exclude-list #{a}]
+    (let [candidates (find-related-objects-of-set input current exclude-list)]
+      (if (some #{b} candidates)
+        count
+        (recur (inc count) candidates (clojure.set/union current exclude-list))))))
+
+(find-distance ["A)B" "B)C" "B)E" "C)D"] "D" "C")
+
+(find-distance sample-input "YOU" "SAN")
+
+(find-distance (read-file "resources/day_six_part_one.txt") "YOU" "SAN")

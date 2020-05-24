@@ -46,3 +46,33 @@
     (find-layers-with-fewest-zero-digits 25 6)
     find-checksum)
 
+
+(defn combine-two-layers
+  [a b]
+  (for [index (range (count a))
+        :let [a-val (nth a index)
+              b-val (nth b index)]]
+    (if (= 2 a-val)
+      b-val
+      a-val)))
+
+(defn compose-layers
+  [input w h]
+  (->> (find-layers input w h)
+       (reduce combine-two-layers)))
+
+(defn print-composed-layers
+  [input w h]
+  (let [rows (->> (compose-layers input w h)
+                  (partition w))]
+    (doseq [row rows]
+      (println (map #(if (pos? %) % " ") row)))))
+
+
+(print-composed-layers "0222112222120000" 2 2)
+
+
+(-> "resources/day_eight_part_one.txt"
+    read-file
+    first
+    (print-composed-layers 25 6))
